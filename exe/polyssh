@@ -1,0 +1,3 @@
+#!/usr/bin/env ruby
+require "polyssh"
+Polyssh::CLI.run(ARGV)
