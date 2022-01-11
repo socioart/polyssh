@@ -1,7 +1,9 @@
 PATH
   remote: .
   specs:
-    polyssh (0.1.0)
+    polyssh (0.1.1)
+      tty-cursor (~> 0.7.1)
+      tty-table (~> 0.12.0)
 
 GEM
   remote: https://rubygems.org/
@@ -68,8 +70,6 @@ DEPENDENCIES
   rake (~> 12.0)
   rspec (~> 3.0)
   rubocop (~> 1.24)
-  tty-cursor (~> 0.7.1)
-  tty-table (~> 0.12.0)
 
 BUNDLED WITH
    2.2.3
