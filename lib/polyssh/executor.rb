@@ -1,8 +1,12 @@
+require "open3"
+require "shellwords"
+
 module Polyssh
   module Executor
-    def self.build(collector, host, command)
-      Ractor.new(collector, host, command) do |collector, host, command|
-        Open3.popen3("ssh #{host} #{command}") do |stdin, stdout, stderr, wait_thread|
+    def self.build(collector, host, command, ssh_options)
+      Ractor.new(collector, host, command, ssh_options) do |collector, host, command, ssh_options|
+        puts "ssh #{host} #{ssh_options} #{command}"
+        Open3.popen3("ssh #{host} #{ssh_options} #{command}") do |stdin, stdout, stderr, wait_thread|
           collector.send([:update, host, :pid, wait_thread.pid])
           stdin.close
           loop do

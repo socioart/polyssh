@@ -1,5 +1,3 @@
-require "open3"
-require "shellwords"
 require "optparse"
 
 module Polyssh
@@ -12,7 +10,7 @@ module Polyssh
       ssh_options = nil
 
       OptionParser.new do |o|
-        o.on("--ssh-options SSH_OPTIONS") {|s| ssh_options = s}
+        o.on("--ssh-options SSH_OPTIONS") {|s| ssh_options = s }
         o.order!(argv)
       end
 
@@ -23,21 +21,7 @@ module Polyssh
         exit 1
       end
 
-      command = argv.shelljoin
-
-      collector = Collector.build(hosts)
-      executors = hosts.map do |host|
-        Executor.build(collector, host, command)
-      end
-      renderer = Renderer.build(collector, hosts, command)
-
-      executors.each(&:take)
-      renderer.send([:end])
-      renderer.take
-      collector.send([:end])
-      collector.take
-
-      puts "Done."
+      Polyssh.run(hosts, argv, ssh_options:)
     end
   end
 end

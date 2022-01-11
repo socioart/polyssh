@@ -2,7 +2,23 @@ require "polyssh/version"
 
 module Polyssh
   class Error < StandardError; end
-  # Your code goes here...
+
+  def self.run(hosts, command_and_arguments, ssh_options: "")
+    command = command_and_arguments.shelljoin
+    collector = Collector.build(hosts)
+    executors = hosts.map do |host|
+      Executor.build(collector, host, command, ssh_options)
+    end
+    renderer = Renderer.build(collector, hosts, command)
+
+    executors.each(&:take)
+    renderer.send([:end])
+    renderer.take
+    collector.send([:end])
+    collector.take
+
+    puts "Done."
+  end
 end
 
 require "polyssh/cli"
