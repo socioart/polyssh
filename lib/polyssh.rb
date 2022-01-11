@@ -6,3 +6,7 @@ module Polyssh
 end
 
 require "polyssh/cli"
+require "polyssh/collector"
+require "polyssh/executor"
+require "polyssh/renderer"
+require "polyssh/patches_for_ractor"
