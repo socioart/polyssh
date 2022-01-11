@@ -1,8 +1,6 @@
-# Polyssh
+# polyssh
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/polyssh`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+polyssh (pronounce as 'polish') runs command on multiple remote servers via ssh with friendly TUI.
 
 ## Installation
 
@@ -22,7 +20,21 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+As CLI:
+
+```
+polyssh --ssh-options "-oStrictHostKeyChecking='no'" user1@foo.example.com,user2@bar.example.com ping -c 3 127.0.0.1
+```
+
+As library:
+
+```
+Polyssh.run(
+  ["user1@foo.example.com", "user2@bar.example.com"],
+  ["ping", "-c", "3", "127.0.0.1"],
+  ssh_options: "-oStrictHostKeyChecking='no'",
+)
+```
 
 ## Development
 
