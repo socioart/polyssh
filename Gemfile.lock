@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    polyssh (2.0.0)
+    polyssh (2.1.0)
       tty-cursor (~> 0.7.1)
       tty-table (~> 0.12.0)
 
