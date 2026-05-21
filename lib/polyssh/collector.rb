@@ -2,14 +2,17 @@ module Polyssh
   module Collector
     def self.build(hosts)
       Ractor.new(hosts) do |hosts|
-        data = hosts.each_with_object({}) {|host, h|
-          h[host] = {
-            host:,
-            pid: nil,
-            status: nil,
-            stdout: "",
-            stderr: "",
-          }
+        data = hosts.to_h {|host|
+          [
+            host,
+            {
+              host:,
+              pid: nil,
+              status: nil,
+              stdout: "",
+              stderr: "",
+            },
+          ]
         }
 
         loop do

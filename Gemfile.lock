@@ -97,7 +97,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  debug (~> 1.11)
+  debug (>= 1.11)
   polyssh!
   rake (>= 12.0)
   rspec (>= 3.0)

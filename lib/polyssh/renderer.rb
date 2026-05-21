@@ -33,8 +33,8 @@ module Polyssh
           case Ractor.recv
           in [:data, data]
             table = TTY::Table.new(header: headers)
-            data.each do |_host, d|
-              table << headers.map {|k| d.fetch(k) }
+            data.each_value do |datum|
+              table << headers.map {|k| datum.fetch(k) }
             end
 
             multiline_renderer.render do |m|
