@@ -3,10 +3,10 @@ require "shellwords"
 
 module Polyssh
   module Executor
-    def self.build(collector, host, command, ssh_options)
-      Ractor.new(collector, host, command, ssh_options) do |collector, host, command, ssh_options|
+    def self.build(collector_port, host, command, ssh_options)
+      Ractor.new(collector_port, host, command, ssh_options) do |collector_port, host, command, ssh_options|
         Open3.popen3("ssh #{host} #{ssh_options} #{command}") do |stdin, stdout, stderr, wait_thread|
-          collector.send([:update, host, :pid, wait_thread.pid])
+          collector_port.send([:update, host, :pid, wait_thread.pid])
           stdin.close
           loop do
             IO.select([stdout, stderr]).first.each do |io|
@@ -16,17 +16,17 @@ module Polyssh
                 next
               end
               key = io == stdout ? :stdout : :stderr
-              collector.send([:append, host, key, buf.force_encoding("utf-8")])
+              collector_port.send([:append, host, key, buf.force_encoding("utf-8")])
             end
 
             break unless wait_thread.alive?
           end
 
-          collector.send([:append, host, :stdout, stdout.read.force_encoding("utf-8")])
-          collector.send([:append, host, :stderr, stderr.read.force_encoding("utf-8")])
+          collector_port.send([:append, host, :stdout, stdout.read.force_encoding("utf-8")])
+          collector_port.send([:append, host, :stderr, stderr.read.force_encoding("utf-8")])
 
           wait_thread.join
-          collector.send([:update, host, :status, wait_thread.value.exitstatus])
+          collector_port.send([:update, host, :status, wait_thread.value.exitstatus])
         end
       end
     end

@@ -21,14 +21,14 @@ module Polyssh
       end
     end
 
-    def self.build(collector, hosts, command)
-      Ractor.new(collector, hosts, command) {|collector, hosts, command|
+    def self.build(collector_port, hosts, command)
+      Ractor.new(collector_port, hosts, command) {|collector_port, hosts, command|
         multiline_renderer = MultilineRenderer.new
         headers = %i(host pid status stdout stderr)
         break_after_update = false
 
         loop do
-          collector.send([:data, Ractor.current])
+          collector_port.send([:data, Ractor.current])
 
           case Ractor.recv
           in [:data, data]

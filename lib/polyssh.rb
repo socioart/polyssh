@@ -7,15 +7,15 @@ module Polyssh
     command = command_and_arguments.shelljoin
     collector = Collector.build(hosts)
     executors = hosts.map do |host|
-      Executor.build(collector, host, command, ssh_options)
+      Executor.build(collector.default_port, host, command, ssh_options)
     end
-    renderer = Renderer.build(collector, hosts, command)
+    renderer = Renderer.build(collector.default_port, hosts, command)
 
-    executors.each(&:take)
+    executors.each(&:join)
     renderer.send([:end])
-    renderer.take
+    renderer.join
     collector.send([:end])
-    collector.take
+    collector.join
 
     puts "Done."
   end
